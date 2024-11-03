@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import EventContext from "./EventContext";
 
 const EventState = (props)=>{
-  const host ="http://localhost:5000"
+  const host ="https://volunteer-website-backend.onrender.com"
     const eventsInitial = [];
       const [events, setEvents] = useState(eventsInitial);
       const [reg, setreg] = useState(false);
