@@ -4,19 +4,25 @@ import Form from "react-bootstrap/Form";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
-import { LinkContainer } from "react-router-bootstrap";
-import Offcanvas from "react-bootstrap/Offcanvas";
 import { useNavigate, Link } from "react-router-dom";
+import Offcanvas from "react-bootstrap/Offcanvas";
 import EventContext from '../context/events/EventContext';
 
 function NavigationMenu() {
   const expand = "sm";
   let navigate = useNavigate();
-  
+
   const handleLogout = () => {
     console.log("logged out");
     localStorage.removeItem('token');
     navigate('/login');
+    window.location.reload();  // Force page reload after logout
+  };
+
+  // Function to handle navigation with reload
+  const handleNavigation = (path) => {
+    navigate(path);
+    window.location.reload();  // Force page reload for route change
   };
 
   return (
@@ -37,33 +43,23 @@ function NavigationMenu() {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="flex-grow-1 pe-3">
-                <LinkContainer to="/">
-                  <Nav.Link>Home</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/About">
-                  <Nav.Link>About</Nav.Link>
-                </LinkContainer>
-                <LinkContainer to="/Host">
-                  <Nav.Link>Organize Event</Nav.Link>
-                </LinkContainer>
+                <Nav.Link onClick={() => handleNavigation("/")}>Home</Nav.Link>
+                <Nav.Link onClick={() => handleNavigation("/about")}>About</Nav.Link>
+                <Nav.Link onClick={() => handleNavigation("/host")}>Organize Event</Nav.Link>
                 <NavDropdown title="My Events" id="basic-nav-dropdown">
-                  <NavDropdown.Item as={Link} to="/volunteered">Volunteered Events</NavDropdown.Item>
-                  <NavDropdown.Item as={Link} to="/organized">Organized Events</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavigation("/volunteered")}>Volunteered Events</NavDropdown.Item>
+                  <NavDropdown.Item onClick={() => handleNavigation("/organized")}>Organized Events</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
               <Form className="d-flex">
                 {!localStorage.getItem('token') ? (
                   <>
-                    <LinkContainer to="/Login">
-                      <Nav.Link>
-                        <Button variant="outline-success" className="mx-2">Login</Button>
-                      </Nav.Link>
-                    </LinkContainer>
-                    <LinkContainer to="/Signup">
-                      <Nav.Link>
-                        <Button variant="outline-success">Signup</Button>
-                      </Nav.Link>
-                    </LinkContainer>
+                    <Nav.Link onClick={() => handleNavigation("/login")}>
+                      <Button variant="outline-success" className="mx-2">Login</Button>
+                    </Nav.Link>
+                    <Nav.Link onClick={() => handleNavigation("/signup")}>
+                      <Button variant="outline-success">Signup</Button>
+                    </Nav.Link>
                   </>
                 ) : (
                   <Nav.Link>
