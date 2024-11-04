@@ -6,35 +6,24 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import { LinkContainer } from "react-router-bootstrap";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 import EventContext from '../context/events/EventContext';
 
-
 function NavigationMenu() {
-  // const context = useContext(EventContext);
-  // const { register, checkRegistration } = context;
   const expand = "sm";
   let navigate = useNavigate();
-  function reloadPage() {
-    window.location.reload();
-  }
-  const handleLogout =()=>{
+  
+  const handleLogout = () => {
     console.log("logged out");
     localStorage.removeItem('token');
-    
     navigate('/login');
-  }
+  };
+
   return (
     <>
-      <Navbar
-        key={expand}
-        bg="dark"
-        variant="dark"
-        expand={expand}
-        className=""
-      >
+      <Navbar key={expand} bg="dark" variant="dark" expand={expand}>
         <Container fluid>
-          <Navbar.Brand href="/">Volunteer</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">Volunteer</Navbar.Brand>
           <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
           <Navbar.Offcanvas
             id={`offcanvasNavbar-expand-${expand}`}
@@ -48,47 +37,40 @@ function NavigationMenu() {
             </Offcanvas.Header>
             <Offcanvas.Body>
               <Nav className="flex-grow-1 pe-3">
-                
-                  <LinkContainer to="/"  onClick={reloadPage()}>
-                    <Nav.Link>Home</Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to="/About"  onClick={reloadPage()}>
-                    <Nav.Link>About</Nav.Link>
-                  </LinkContainer>
-                  <LinkContainer to="/Host" onClick={reloadPage()}>
-                    <Nav.Link>OrganizeEvent</Nav.Link>
-                  </LinkContainer>
-                  <NavDropdown title="My Events" id="basic-nav-dropdown" bg="dark" variant="dark">
-                    <NavDropdown.Item href="/volunteered"  onClick={reloadPage()}>Volunteered Events</NavDropdown.Item>
-                    <NavDropdown.Item href="/organized"  onClick={reloadPage()}>Organized Events</NavDropdown.Item>
-                    
-                  </NavDropdown>
+                <LinkContainer to="/">
+                  <Nav.Link>Home</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/About">
+                  <Nav.Link>About</Nav.Link>
+                </LinkContainer>
+                <LinkContainer to="/Host">
+                  <Nav.Link>Organize Event</Nav.Link>
+                </LinkContainer>
+                <NavDropdown title="My Events" id="basic-nav-dropdown">
+                  <NavDropdown.Item as={Link} to="/volunteered">Volunteered Events</NavDropdown.Item>
+                  <NavDropdown.Item as={Link} to="/organized">Organized Events</NavDropdown.Item>
+                </NavDropdown>
               </Nav>
               <Form className="d-flex">
-  {!localStorage.getItem('token') ? (
-    <>
-      <LinkContainer to="/Login"  onClick={reloadPage()}>
-        <Nav.Link>
-          <Button variant="outline-success" className="mx-2">
-            Login
-          </Button>
-        </Nav.Link>
-      </LinkContainer>
-      <LinkContainer to="/Signup"  onClick={reloadPage()}>
-        <Nav.Link>
-          <Button variant="outline-success">Signup</Button>
-        </Nav.Link>
-      </LinkContainer>
-    </>
-  ) : (
-    
-      <Nav.Link>
-        <Button variant="outline-success" onClick={handleLogout}>Logout</Button>
-      </Nav.Link>
-    
-  )}
-</Form>
-
+                {!localStorage.getItem('token') ? (
+                  <>
+                    <LinkContainer to="/Login">
+                      <Nav.Link>
+                        <Button variant="outline-success" className="mx-2">Login</Button>
+                      </Nav.Link>
+                    </LinkContainer>
+                    <LinkContainer to="/Signup">
+                      <Nav.Link>
+                        <Button variant="outline-success">Signup</Button>
+                      </Nav.Link>
+                    </LinkContainer>
+                  </>
+                ) : (
+                  <Nav.Link>
+                    <Button variant="outline-success" onClick={handleLogout}>Logout</Button>
+                  </Nav.Link>
+                )}
+              </Form>
             </Offcanvas.Body>
           </Navbar.Offcanvas>
         </Container>
